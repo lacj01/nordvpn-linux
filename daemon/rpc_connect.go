@@ -258,7 +258,8 @@ func (r *RPC) connect(
 	// If server has at least one IPv6 address
 	// regardless if IPv4 or IPv6 is used to connect
 	// to the server - DO NOT DISABLE IPv6.
-	if !server.SupportsIPv6() {
+	// if routing is not enabled, don't worry about ipv6
+	if cfg.Routing.Get() && !server.SupportsIPv6() {
 		if err := r.netw.DenyIPv6(); err != nil {
 			log.Println(internal.ErrorPrefix, "failed to disable ipv6:", err)
 		}

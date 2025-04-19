@@ -6,6 +6,7 @@ package dns
 import (
 	"errors"
 	"fmt"
+	"github.com/NordSecurity/nordvpn-linux/config"
 	"log"
 	"strings"
 
@@ -45,11 +46,13 @@ type DefaultSetter struct {
 	methods   []Method
 }
 
-func NewSetter(publisher events.Publisher[string]) *DefaultSetter {
+func NewSetter(publisher events.Publisher[string], routing config.TrueField) *DefaultSetter {
 	ds := DefaultSetter{
 		publisher: publisher,
 		methods:   []Method{},
 	}
+	// do nothing if not routing
+	ds.methods = append(ds.methods, &NoopDnsMethod{routing})
 	ds.methods = append(ds.methods, &Resolved{})
 	// Resolvectl is part of systemd-resolved, but is used under Snap, where some restrictions apply
 	ds.methods = append(ds.methods, &Resolvectl{})

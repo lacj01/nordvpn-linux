@@ -258,7 +258,7 @@ func main() {
 		httpClientSimple,
 	)
 	gwret := netlinkrouter.Retriever{}
-	dnsSetter := dns.NewSetter(infoSubject)
+	dnsSetter := dns.NewSetter(infoSubject, cfg.Routing)
 	dnsHostSetter := dns.NewHostsFileSetter(dns.HostsFilePath)
 
 	eventsDbPath := filepath.Join(internal.DatFilesPath, "moose.db")
